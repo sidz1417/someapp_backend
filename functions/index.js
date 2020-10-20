@@ -38,19 +38,6 @@ exports.createClaims = functions.firestore.document('moderators/{moderator}').on
             t.delete(docRef)
         })
     }
-    // const userId = snap.data().uid
-    // if (userId == null) return { code: `Error : No UID field in document` }
-    // console.log(`New moderator detected : ${userId}`)
-    // try {
-    //     await admin.auth().setCustomUserClaims(userId, { isModerator: true })
-    //     const userRecord = admin.auth().getUser(userId)
-    //     const customClaims = (await userRecord).customClaims
-    //     console.log(`Custom claims added for user ${userId} : ${JSON.stringify(customClaims)}`)
-    //     return { code: 'Success' }
-    // }
-    // catch (e) {
-    //     return { code: `Error : ${e}` }
-    // }
 })
 
 exports.revokeClaims = functions.firestore.document('moderators/{userId}').onDelete(async (snap, _) => {
@@ -81,7 +68,7 @@ exports.createCategory = functions.https.onCall(async (params, context) => {
     const userID = context.auth.uid
     console.log(`userID ${userID} invoked createCategory`)
     const categoryName = params.categoryName
-    if (categoryName == null || categoryName.length > 10) throw new HttpsError('permission-denied', 'Please enter a valid categoryName')
+    if (categoryName.length > 10) throw new HttpsError('permission-denied', 'Category Name length should be less than 10 characters')
     const userRecord = await admin.auth().getUser(userID)
     const customClaims = userRecord.customClaims
     console.log(`Custom claims of user ${userID} : ${JSON.stringify(customClaims)}`)
