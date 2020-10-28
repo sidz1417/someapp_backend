@@ -6,6 +6,16 @@ let is_createCategory_initialized = false
 let is_removeCategory_initialized = false
 let is_upVote_initialized = false
 
+exports.onCreateUser = functions.auth.user().onCreate((user) => {
+    console.log(`User ${user.uid} with email ${user.email} created`)
+    return;
+})
+
+exports.onDeleteUser = functions.auth.user().onDelete((user) => {
+    console.log(`User ${user.uid} with email ${user.email} deleted`)
+    return;
+})
+
 
 exports.createClaims = functions.firestore.document('moderators/{moderator}').onCreate(async (snap, _) => {
     const admin = require('firebase-admin')
